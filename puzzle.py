@@ -23,26 +23,25 @@ def find_neighbors(puzzle, square):
     if row < len(puzzle) - 1:
         if puzzle[row+1][column] == '-':
             neighbors.append((row+1, column))
-
     return neighbors
 
 
 def solve_puzzle(board, source, destination):
-    q = Queue(maxsize=len(puzzle)*len(puzzle[0]))
+    q = Queue(maxsize=len(board)*len(board[0]))
     visited = {source:None}
     q.put(source)
     while not q.empty() and destination not in visited:
         curr_square = q.get()
-        neighbors = find_neighbors(puzzle, curr_square)
+        neighbors = find_neighbors(board, curr_square)
         for neighbor in neighbors:
             if neighbor not in visited:
                 visited[neighbor] = curr_square
                 q.put(neighbor)
-    print(curr_square)
-    print(q.get())
 
 
     # Trace solution path
+    if destination not in visited:
+        return None
     path = [destination]
     curr_square = destination
     while visited[curr_square] is not None:
@@ -50,19 +49,4 @@ def solve_puzzle(board, source, destination):
         path.append(parent)
         curr_square = parent
     path.reverse()
-    print(path)
-
-
-
-puzzle = [
- ['-', '-', '-', '-', '-'],
- ['-', '-', '#', '-', '-'],
- ['-', '-', '-', '-', '-'],
- ['#', '-', '#', '#', '-'],
- ['-', '#', '-', '-', '-']
-]
-
-source = (0, 0)
-destination = (4, 0)
-
-solve_puzzle(puzzle, source, destination)
+    return path
